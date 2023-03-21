@@ -25,14 +25,18 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   collection: ^1.15.0-nullsafety.4
-  twilio_programmable_video: ^1.0.1
+#  twilio_programmable_video: ^1.0.1
 
 dev_dependencies:
   flutter_driver:
     sdk: flutter
   test: ^1.16.5
-#  twilio_programmable_video:
-#    path: ../
+  twilio_programmable_video:
+    git: https://github.com/firepmi/twilio-programmable-video-flutter
+  twilio_programmable_video_platform_interface:
+    git: https://github.com/firepmi/twilio_programmable_video_platform_interface
+  twilio_programmable_video_web:
+    git: https://github.com/firepmi/twilio_programmable_video_web
 
 
 # For information on the generic Dart part of this file, see the
