@@ -5,15 +5,19 @@ class TwilioProgrammableVideo {
   // ignore: cancel_subscriptions
   static StreamSubscription? _loggingStream;
 
-  static final StreamController _onAudioNotification = StreamController.broadcast(onListen: () {
-    _audioNotificationStream = ProgrammableVideoPlatform.instance.audioNotificationStream().listen(_parseAudioNotificationEvents);
+  static final StreamController _onAudioNotification =
+      StreamController.broadcast(onListen: () {
+    _audioNotificationStream = ProgrammableVideoPlatform.instance
+        .audioNotificationStream()
+        .listen(_parseAudioNotificationEvents);
   }, onCancel: () {
     _audioNotificationStream?.cancel();
   });
 
   static Stream onAudioNotification = _onAudioNotification.stream;
 
-  static StreamSubscription<BaseAudioNotificationEvent>? _audioNotificationStream;
+  static StreamSubscription<BaseAudioNotificationEvent>?
+      _audioNotificationStream;
 
   static var _dartDebug = false;
 
@@ -78,11 +82,14 @@ class TwilioProgrammableVideo {
   /// Enable debug logging.
   ///
   /// For native logging set [native] to `true` and for dart set [dart] to `true`.
-  static Future<void> debug({bool dart = false, bool native = false, bool audio = false}) async {
+  static Future<void> debug(
+      {bool dart = false, bool native = false, bool audio = false}) async {
     _dartDebug = dart;
     await ProgrammableVideoPlatform.instance.setNativeDebug(native, audio);
     if ((native || audio) && _loggingStream == null) {
-      _loggingStream = ProgrammableVideoPlatform.instance.loggingStream().listen((dynamic event) {
+      _loggingStream = ProgrammableVideoPlatform.instance
+          .loggingStream()
+          .listen((dynamic event) {
         if (native || audio) {
           debugPrint('[  NATIVE  ] $event');
         }
@@ -171,15 +178,18 @@ class TwilioProgrammableVideo {
     final camPermission = await Permission.camera.status;
     _log('Permissions => Microphone: $micPermission, Camera: $camPermission');
 
-    if (micPermission == PermissionStatus.granted && camPermission == PermissionStatus.granted) {
+    if (micPermission == PermissionStatus.granted &&
+        camPermission == PermissionStatus.granted) {
       return true;
     }
 
-    if (micPermission == PermissionStatus.denied || camPermission == PermissionStatus.denied) {
+    if (micPermission == PermissionStatus.denied ||
+        camPermission == PermissionStatus.denied) {
       return requestPermissionForCameraAndMicrophone();
     }
 
-    if (micPermission == PermissionStatus.permanentlyDenied || camPermission == PermissionStatus.permanentlyDenied) {
+    if (micPermission == PermissionStatus.permanentlyDenied ||
+        camPermission == PermissionStatus.permanentlyDenied) {
       _log('Permissions => Opening App Settings');
       await openAppSettings();
     }
@@ -197,7 +207,9 @@ class TwilioProgrammableVideo {
   static Future<Room> connect(ConnectOptions connectOptions) async {
     if (await requestPermissionForCameraAndMicrophone()) {
       try {
-        final roomId = await ProgrammableVideoPlatform.instance.connectToRoom(connectOptions.toModel());
+        ProgrammableVideoPlatform.resetInstance();
+        final roomId = await ProgrammableVideoPlatform.instance
+            .connectToRoom(connectOptions.toModel());
         if (roomId == null) {
           throw Exception('RoomId is null');
         }
